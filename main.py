@@ -1,8 +1,33 @@
+import os
+# import logging
 import streamlit as st
 import chromadb
 from openai import OpenAI
+# from chroma import create_collection
+# from extractMarkdown import process_files_in_directory
+
+directory = "/home/Code/Projects/Rag/AppropLaw/approp"
+
+
+# process_files_in_directory(directory)
+# create_collection()
+
+# logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(message)s")
 
 client_openai = OpenAI()
+
+
+def clear_directory(dir_path):
+    if os.path.exists(dir_path):
+        for file_name in os.listdir(dir_path):
+            file_path = os.path.join(dir_path, file_name)
+            if os.path.isdir(file_path):
+                clear_directory(file_path)
+                os.rmdir(file_path)
+#                logging.info(f"Removed Directory: {file_path}")
+            else:
+                os.remove(file_path)
+#                logging.info(f"Deleted file: {file_path}")
 
 
 def get_completion(prompt):
@@ -42,6 +67,10 @@ if st.button("Get Answers"):
     search_results = []
 
     for res in results["documents"]:
+        for txt in res:
+            st.write(txt)
+
+    for res in results["documents"]:
         for doc, meta in zip(res, results["metadatas"][0]):
             metadata_str = ", ".join(
                 f"{key}: {value}" for key, value in meta.items())
@@ -51,6 +80,7 @@ if st.button("Get Answers"):
     prompt = f"""Your task is to answer the following user question using the supplied search results. User Question: {user_question}
     Search Results: {search_text}
     """
+    # st.json(results)
 
     response = get_completion(prompt)
     st.write(response)

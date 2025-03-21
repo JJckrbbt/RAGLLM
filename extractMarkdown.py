@@ -1,8 +1,7 @@
 import os
 import pymupdf4llm
 
-folder_path = "./markdown_collection/"
-directory = "/home/Code/Projects/Rag/AppropLaw/approp"
+directory = "/home/Code/Projects/data/documents"
 
 
 def save_markdown(content, folder_path, filename):
@@ -27,9 +26,10 @@ def process_files_in_directory(directory_path):
             source_path = os.path.join(directory_path, filename)
 
             if os.path.isfile(source_path):
+                extract_path = "./markdown_collection/"
                 print(f"Processing file: {filename}")
                 md_text = pymupdf4llm.to_markdown(source_path)
-                save_markdown(md_text, folder_path, filename)
+                save_markdown(md_text, extract_path, filename)
 
     except FileNotFoundError as e:
         print(f"Error: {e}")
@@ -38,11 +38,3 @@ def process_files_in_directory(directory_path):
 
 
 process_files_in_directory(directory)
-
-# splitter = MarkdownTextSplitter(chunk_size=600, chunk_overlap=50)
-
-# split_text = splitter.create_documents([md_text])
-
-# print(split_text)
-
-# save_json(split_text, folder_path, "split redbook1-4.json")

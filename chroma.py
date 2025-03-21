@@ -1,6 +1,8 @@
 import chromadb
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 
+folder_path = "markdown_collection"
+
 files = [
     {
         "title":
@@ -58,46 +60,39 @@ files = [
     }
 ]
 
-folder_path = "markdown_collection"
-
 
 client = chromadb.PersistentClient("./mycollection/")
 collection = client.get_or_create_collection(
     name='RAG_Assistant', metadata={"hnsw:space": "cosine"})
 
-# with open(f"./{folder_path}/{files[0]['filename']}", "r") as file:
-#     content = file.read()
 
 text_splitter = RecursiveCharacterTextSplitter(separators=["\n\n", "\n", ". ", "? ", "! "],
                                                chunk_size=1500,
                                                chunk_overlap=200
                                                )
 
-# chunks = text_splitter.create_documents([content])
-# print(chunks[:3])
 
 documents = []
 metadatas = []
 ids = []
 
-for file_info in files:
-    with open(f"./{folder_path}/{file_info['filename']}", "r") as file:
-        content = file.read()
 
-        chunks = text_splitter.create_documents([content])
+def create_collection():
+    for file_info in files:
+        with open(f"./{folder_path}/{file_info['filename']}", "r") as file:
+            content = file.read()
 
-        for index, chunk in enumerate(chunks):
-            metadatas.append({
-                             "title": file_info["title"],
-                             "source_url": file_info["source_url"],
-                             "chunk_idx": index
-                             })
+            chunks = text_splitter.create_documents([content])
 
-            ids.append(f"{file_info['filename']}_{index}")
+            for index, chunk in enumerate(chunks):
+                metadatas.append({
+                                 "title": file_info["title"],
+                                 "source_url": file_info["source_url"],
+                                 "chunk_idx": index
+                                 })
 
-            documents.append(chunk.page_content)
+                ids.append(f"{file_info['filename']}_{index}")
 
-collection.add(documents=documents, metadatas=metadatas, ids=ids)
+                documents.append(chunk.page_content)
 
-collection.query(query_texts=["what is continuing need?",
-                 "what is bona fide need?"], n_results=1)
+    collection.add(documents=documents, metadatas=metadatas, ids=ids)
