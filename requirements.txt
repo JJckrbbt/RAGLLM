@@ -1,0 +1,2 @@
+chroma
+pymupdf4llm
