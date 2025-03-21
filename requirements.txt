@@ -1,2 +1,2 @@
-chroma
+chromadb
 pymupdf4llm
