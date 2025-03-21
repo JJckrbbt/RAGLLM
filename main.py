@@ -3,7 +3,7 @@ import os
 import streamlit as st
 import chromadb
 from openai import OpenAI
-# from chroma import create_collection
+from chroma import create_collection
 # from extractMarkdown import process_files_in_directory
 
 directory = "/home/Code/Projects/Rag/AppropLaw/approp"
@@ -15,6 +15,8 @@ directory = "/home/Code/Projects/Rag/AppropLaw/approp"
 # logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(message)s")
 
 client_openai = OpenAI()
+
+client_openai.api_key = os.environ.get("OPENAI_API_KEY")
 
 
 def clear_directory(dir_path):
