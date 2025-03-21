@@ -1,7 +1,7 @@
 import os
 import pymupdf4llm
 
-directory = "/home/Code/Projects/data/documents"
+directory = "./data/documents/"
 
 
 def save_markdown(content, folder_path, filename):

@@ -1,3 +1,4 @@
 mycollection/
 markdown_collection/
-__pycache__i/
+__pycache__/
+venv/
