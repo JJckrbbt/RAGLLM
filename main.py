@@ -68,9 +68,9 @@ if st.button("Get Answers"):
 
     search_results = []
 
-    for res in results["documents"]:
-        for txt in res:
-            st.write(txt)
+#    for res in results["documents"]:
+#        for txt in res:
+#            st.write(txt)
 
     for res in results["documents"]:
         for doc, meta in zip(res, results["metadatas"][0]):
